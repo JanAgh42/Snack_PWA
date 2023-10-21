@@ -1,4 +1,4 @@
-## Snack - frontend
+## Snack - PWA
 
 A social network PWA inspired by Slack, a cloud-based freemium cross-platform instant messaging service.
 
