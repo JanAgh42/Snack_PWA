@@ -86,7 +86,7 @@
           label="Log out"
           color="red-7"
           class="text-capitalize rounded-borders"
-          @click="() => $router.push('/')"
+          @click="() => $router.push({ name: 'Main' })"
           push
         />
       </div>

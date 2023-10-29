@@ -32,6 +32,6 @@ const router = useRouter();
 
 function switchPage(name: string): void {
   store.changeAppPage(name);
-  router.push(`/app${store.getChosenAppPage}`);
+  router.push({ path: `/app${store.getChosenAppPage}` });
 }
 </script>

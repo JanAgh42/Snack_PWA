@@ -66,7 +66,7 @@ let rememberMe = ref(false);
 
 function login() {
   appStore.changeAppPage('');
-  router.push('/app');
+  router.push({ name: 'Index' });
 }
 </script>
 

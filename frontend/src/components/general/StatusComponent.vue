@@ -42,7 +42,7 @@ const userStatus = computed(() => statusStore.states.online);
 
 function showProfile(): void {
   appStore.changeAppPage('/profile');
-  router.push('/app/profile');
+  router.push({ name: 'Profile' });
 }
 </script>
 

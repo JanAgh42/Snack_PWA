@@ -93,7 +93,7 @@ let confirmPassword = ref('');
 
 function register() {
   appStore.changeAppPage('');
-  router.push('/app');
+  router.push({ name: 'Index' });
 }
 </script>
 

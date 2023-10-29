@@ -3,6 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/app',
+    name: 'App',
     component: () => import('layouts/ApplicationLayout.vue'),
     children: [
       {
@@ -24,11 +25,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/',
+    name: 'Initial',
     component: () => import('layouts/InitialLayout.vue'),
     children: [
       {
         path: '',
-        name: 'Initial',
+        name: 'Main',
         component: () => import('pages/InitialPage.vue'),
       },
       {

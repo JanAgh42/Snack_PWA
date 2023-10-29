@@ -11,7 +11,7 @@
         color="indigo-10"
         label="Get Started"
         size="lg"
-        @click="() => $router.push('/register')"
+        @click="() => $router.push({ name: 'Register' })"
         rounded
       />
     </section>

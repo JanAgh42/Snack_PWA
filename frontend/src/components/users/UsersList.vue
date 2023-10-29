@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { useStatusStore } from 'src/stores/status-store';
 import UserEntry from './UserEntry.vue';
 
@@ -115,6 +115,8 @@ onMounted(() => {
   calculateHeight();
   window.addEventListener('resize', calculateHeight);
 });
+
+onUnmounted(() => window.removeEventListener('resize', calculateHeight));
 </script>
 
 <style scoped lang="scss">

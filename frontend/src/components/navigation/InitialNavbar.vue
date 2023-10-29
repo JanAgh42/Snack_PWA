@@ -9,7 +9,7 @@
           icon-right="o_navigate_next"
           unelevated
           rounded
-          @click="() => $router.push('/login')"
+          @click="() => $router.push({ name: 'Login' })"
           >Log in</q-btn
         >
       </q-toolbar>
@@ -23,7 +23,7 @@
           icon="o_navigate_before"
           unelevated
           rounded
-          @click="() => $router.push('/')"
+          @click="() => $router.push({ name: 'Main' })"
           >Go back</q-btn
         >
       </q-toolbar>
