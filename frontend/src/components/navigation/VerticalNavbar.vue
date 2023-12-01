@@ -20,6 +20,15 @@
         <q-icon name="o_account_circle" size="22px" color="grey-6" />
       </q-item>
     </section>
+    <q-item
+      clickable
+      @click="switchPage('/settings')"
+      :active="store.getChosenAppPage == '/settings'"
+      active-class="active-color"
+      class="q-px-md flex justify-center items-center"
+    >
+      <q-icon name="o_settings" size="22px" color="grey-6" />
+    </q-item>
   </nav>
 </template>
 
