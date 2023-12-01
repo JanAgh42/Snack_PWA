@@ -42,3 +42,5 @@ Ws.middleware.register([
 Ws.middleware.registerNamed({
   // auth: () => import('App/Middleware/Auth')
 })
+
+Ws.middleware.register([() => import('App/Middleware/Authentication')])

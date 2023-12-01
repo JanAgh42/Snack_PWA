@@ -1,6 +1,7 @@
 import { AuthenticationException } from '@adonisjs/auth/build/standalone'
 import type { GuardsList } from '@ioc:Adonis/Addons/Auth'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { WsContextContract } from '@ioc:Ruby184/Socket.IO/WsContext'
 
 /**
  * Auth middleware is meant to restrict un-authenticated access to a given route
@@ -9,7 +10,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
  * You must register this middleware inside `start/kernel.ts` file under the list
  * of named middleware.
  */
-export default class AuthMiddleware {
+class AuthenticationMiddleware {
   /**
    * The URL to redirect to when request is Unauthorized
    */
@@ -73,4 +74,23 @@ export default class AuthMiddleware {
     await this.authenticate(auth, guards)
     await next()
   }
+
+  /**
+   * Handle ws namespace connection
+   */
+  public async wsHandle(
+    { auth }: WsContextContract,
+    next: () => Promise<void>,
+    customGuards: (keyof GuardsList)[]
+  ) {
+    /**
+     * Uses the user defined guards or the default guard mentioned in
+     * the config file
+     */
+    const guards = customGuards.length ? customGuards : [auth.name]
+    await this.authenticate(auth, guards)
+    await next()
+  }
 }
+
+export default AuthenticationMiddleware
