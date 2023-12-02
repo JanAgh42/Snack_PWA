@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useGroupStore } from '../../stores/group-store';
+import { useGroupStore } from '../../stores/groupStore';
 import GroupMessage from './GroupMessage.vue';
 
 const store = useGroupStore();

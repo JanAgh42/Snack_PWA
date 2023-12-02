@@ -5,8 +5,7 @@ export const useUserStore = defineStore('users', {
   state: () => ({
     current: {
       nickname: 'Nickname',
-      firstname: 'Firstname',
-      lastname: 'Lastname',
+      name: 'Firstname',
       email: 'Email',
       color: 'bg-blue-7',
     },

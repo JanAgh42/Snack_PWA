@@ -4,9 +4,9 @@
       class="q-pa-lg bg glass-design rounded-borders column items-center shadow-4"
     >
       <div class="q-mb-md text-h6">Sign In</div>
-      <q-form @submit="login" class="column items-center">
+      <q-form class="column items-center">
         <q-input
-          v-model="email"
+          v-model="login.email"
           label="Email"
           label-color="grey-7"
           type="email"
@@ -17,7 +17,7 @@
         />
 
         <q-input
-          v-model="password"
+          v-model="login.password"
           label="Password"
           label-color="grey-7"
           type="password"
@@ -29,7 +29,7 @@
         <q-toggle
           label="Remember me"
           class="q-mb-md"
-          v-model="rememberMe"
+          v-model="login.rememberMe"
           color="indigo-4"
           keep-color
         />
@@ -39,7 +39,8 @@
           label="Sign In"
           color="indigo-7"
           class="text-capitalize"
-          @click="login"
+          :loading="loginLoading"
+          @click="loginUser"
           rounded
           push
         />
@@ -53,18 +54,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useApplicationStore } from 'src/stores/application-store';
+import { computed, reactive } from 'vue';
+import { useApplicationStore } from 'src/stores/applicationStore';
+import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useRouter } from 'vue-router';
+
+import Login from 'src/models/users/login';
 
 const router = useRouter();
 const appStore = useApplicationStore();
+const authStore = useAuthenticationStore();
 
-let email = ref('');
-let password = ref('');
-let rememberMe = ref(false);
+const loginLoading = computed(() => authStore.status === 'pending');
 
-function login() {
+const login: Login = reactive({
+  email: '',
+  password: '',
+  rememberMe: false,
+});
+
+async function loginUser(): Promise<void> {
+  const token = await authStore.loginUser(login);
+
+  if (token === null) {
+    return;
+  }
+
   appStore.changeAppPage('');
   router.push({ name: 'Index' });
 }

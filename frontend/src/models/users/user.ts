@@ -1,7 +1,6 @@
 export default interface User {
+  name: string;
   nickname: string;
-  firstname: string;
-  lastname: string;
   email: string;
   color: string;
 }

@@ -4,9 +4,9 @@
       class="q-pa-lg bg glass-design rounded-borders column items-center shadow-4"
     >
       <div class="q-mb-md text-h6">Register</div>
-      <q-form @submit="register" class="column items-center">
+      <q-form class="column items-center">
         <q-input
-          v-model="name"
+          v-model="register.name"
           label="Name"
           label-color="grey-7"
           type="text"
@@ -16,7 +16,7 @@
           borderless
         />
         <q-input
-          v-model="nickname"
+          v-model="register.nickname"
           label="Nickname"
           label-color="grey-7"
           type="text"
@@ -27,7 +27,7 @@
         />
 
         <q-input
-          v-model="email"
+          v-model="register.email"
           label="Email"
           label-color="grey-7"
           type="email"
@@ -38,7 +38,7 @@
         />
 
         <q-input
-          v-model="password"
+          v-model="register.password"
           label="Password"
           label-color="grey-7"
           type="password"
@@ -64,7 +64,8 @@
           label="Create account"
           color="indigo-7"
           class="text-capitalize"
-          @click="register"
+          :loading="registerLoading"
+          @click="registerUser"
           rounded
           push
         />
@@ -78,22 +79,33 @@
 </template>
 
 <script setup lang="ts">
-import { useApplicationStore } from 'src/stores/application-store';
+import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { ref, reactive, computed } from 'vue';
+
+import Register from 'src/models/users/register';
 
 const router = useRouter();
-const appStore = useApplicationStore();
+const authStore = useAuthenticationStore();
 
-let name = ref('');
-let nickname = ref('');
-let email = ref('');
-let password = ref('');
+const registerLoading = computed(() => authStore.status === 'pending');
+
+const register: Register = reactive({
+  name: '',
+  nickname: '',
+  email: '',
+  password: '',
+});
+
 let confirmPassword = ref('');
 
-function register() {
-  appStore.changeAppPage('');
-  router.push({ name: 'Index' });
+async function registerUser(): Promise<void> {
+  if (register.password !== confirmPassword.value) {
+    return;
+  }
+
+  await authStore.registerUser(register);
+  router.push({ name: 'Login' });
 }
 </script>
 

@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { useApplicationStore } from '../stores/application-store';
+import { useApplicationStore } from '../stores/applicationStore';
 import GroupsList from '../components/groups/GroupsList.vue';
 import UsersList from '../components/users/UsersList.vue';
 import GroupChat from '../components/messages/GroupChat.vue';

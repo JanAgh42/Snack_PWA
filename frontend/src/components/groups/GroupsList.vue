@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useApplicationStore } from 'src/stores/application-store';
+import { useApplicationStore } from 'src/stores/applicationStore';
 import SearchComponent from '../general/SearchComponent.vue';
 import StatusComponent from '../general/StatusComponent.vue';
 import GroupEntry from './GroupEntry.vue';

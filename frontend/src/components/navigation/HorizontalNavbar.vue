@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { useApplicationStore } from 'src/stores/application-store';
+import { useApplicationStore } from 'src/stores/applicationStore';
 
 const store = useApplicationStore();
 </script>

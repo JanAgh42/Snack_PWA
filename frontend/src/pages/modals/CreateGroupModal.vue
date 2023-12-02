@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useApplicationStore } from '../../stores/application-store';
+import { useApplicationStore } from '../../stores/applicationStore';
 
 const appStore = useApplicationStore();
 

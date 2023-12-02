@@ -1,28 +1,16 @@
 <template>
   <q-page class="col row justify-center items-center" fullscreen>
     <div
-      class="q-pa-lg bg glass-design rounded-borders column items-center shadow-4 profile-width"
+      class="q-pa-lg bkg-primary rounded-borders column items-center profile-width"
     >
       <div class="q-mb-md text-h6">Profile</div>
       <q-form class="column items-center input-max-width">
         <q-input
-          v-model="firstname"
+          v-model="name"
           label="Firstname"
           label-color="grey-7"
           type="text"
           class="input-max-width border"
-          :input-style="{ color: 'rgb(158, 158, 158)' }"
-          :disable="!isEditing"
-          dense
-          borderless
-        />
-
-        <q-input
-          v-model="lastname"
-          label="Lastname"
-          label-color="grey-7"
-          type="text"
-          class="q-mt-sm input-max-width border"
           :input-style="{ color: 'rgb(158, 158, 158)' }"
           :disable="!isEditing"
           dense
@@ -95,13 +83,12 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from 'src/stores/user-store';
+import { useUserStore } from 'src/stores/userStore';
 import { ref, onMounted } from 'vue';
 
 const userStore = useUserStore();
 
-let firstname = ref('');
-let lastname = ref('');
+let name = ref('');
 let nickname = ref('');
 let email = ref('');
 
@@ -109,16 +96,14 @@ let isEditing = ref(null);
 
 function loadUserData() {
   isEditing.value = false;
-  firstname.value = userStore.getCurrentUser.firstname;
-  lastname.value = userStore.getCurrentUser.lastname;
+  name.value = userStore.getCurrentUser.name;
   nickname.value = userStore.getCurrentUser.nickname;
   email.value = userStore.getCurrentUser.email;
 }
 
 function saveUserData() {
   isEditing.value = false;
-  userStore.$state.current.firstname = firstname.value;
-  userStore.$state.current.lastname = lastname.value;
+  userStore.$state.current.name = name.value;
 }
 
 onMounted(() => loadUserData());

@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
-import { useStatusStore } from 'src/stores/status-store';
+import { useStatusStore } from 'src/stores/statusStore';
 import UserEntry from './UserEntry.vue';
 
 const statusStore = useStatusStore();

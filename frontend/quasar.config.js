@@ -10,13 +10,13 @@
 
 const { configure } = require('quasar/wrappers');
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
       // include: [],
       // exclude: [],
-      // rawOptions: {},
+      // rawOptions: {}
       warnings: true,
       errors: true,
     },
@@ -27,7 +27,7 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios'],
+    boot: ['pinia', 'axios', 'authentication'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -54,7 +54,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node16',
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -63,7 +63,11 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        API_URL:
+          process.env.API_URL ||
+          (ctx.dev ? 'http://localhost:3333' : 'https://prod.api.com'),
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -104,19 +108,19 @@ module.exports = configure(function (/* ctx */) {
 
     animations: 'all',
     // https://v2.quasar.dev/options/animations
-    animations: [],
+    // animations: [],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
-    // sourceFiles: {
-    //   rootComponent: 'src/App.vue',
-    //   router: 'src/router/index',
-    //   store: 'src/store/index',
-    //   registerServiceWorker: 'src-pwa/register-service-worker',
-    //   serviceWorker: 'src-pwa/custom-service-worker',
-    //   pwaManifestFile: 'src-pwa/manifest.json',
-    //   electronMain: 'src-electron/electron-main',
-    //   electronPreload: 'src-electron/electron-preload'
-    // },
+    sourceFiles: {
+      //   rootComponent: 'src/App.vue',
+      router: 'src/router/index',
+      store: 'src/store/index',
+      //   registerServiceWorker: 'src-pwa/register-service-worker',
+      //   serviceWorker: 'src-pwa/custom-service-worker',
+      //   pwaManifestFile: 'src-pwa/manifest.json',
+      //   electronMain: 'src-electron/electron-main',
+      //   electronPreload: 'src-electron/electron-preload'
+    },
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
     ssr: {

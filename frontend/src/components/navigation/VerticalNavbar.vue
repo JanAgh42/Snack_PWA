@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { useApplicationStore } from 'src/stores/application-store';
+import { useApplicationStore } from 'src/stores/applicationStore';
 import { useRouter } from 'vue-router';
 
 const store = useApplicationStore();

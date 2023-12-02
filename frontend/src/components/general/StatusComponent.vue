@@ -13,9 +13,9 @@
       <q-item-label class="truncate full-width nickname-color"
         >{{ currentUser.nickname }}
       </q-item-label>
-      <q-item-label caption class="real-name-color truncate full-width"
-        >{{ currentUser.firstname }} {{ currentUser.lastname }}</q-item-label
-      >
+      <q-item-label caption class="real-name-color truncate full-width">{{
+        currentUser.name
+      }}</q-item-label>
     </q-item-section>
     <q-item-section side top>
       <q-item-label :style="{ color: userStatus.color }" caption>{{
@@ -26,9 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from 'src/stores/user-store';
-import { useStatusStore } from 'src/stores/status-store';
-import { useApplicationStore } from 'src/stores/application-store';
+import { useUserStore } from 'src/stores/userStore';
+import { useStatusStore } from 'src/stores/statusStore';
+import { useApplicationStore } from 'src/stores/applicationStore';
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
 

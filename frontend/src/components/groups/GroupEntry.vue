@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGroupStore } from '../../stores/group-store';
+import { useGroupStore } from '../../stores/groupStore';
 
 const props = defineProps(['group']);
 const store = useGroupStore();
