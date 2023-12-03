@@ -1,22 +1,24 @@
 import { defineStore } from 'pinia';
 
-export const useStatusStore = defineStore('states', {
-  state: () => ({
-    states: {
-      online: {
-        name: 'Online',
-        color: 'green',
-      },
-      offline: {
-        name: 'Offline',
-        color: 'grey',
-      },
-      dnd: {
-        name: 'DND',
-        color: 'red',
-      },
+import { reactive } from 'vue';
+
+export const useStatusStore = defineStore('states', () => {
+  const states = reactive({
+    online: {
+      name: 'Online',
+      color: 'green',
     },
-  }),
-  getters: {},
-  actions: {},
+    offline: {
+      name: 'Offline',
+      color: 'grey',
+    },
+    dnd: {
+      name: 'DND',
+      color: 'red',
+    },
+  });
+
+  return {
+    states,
+  };
 });
