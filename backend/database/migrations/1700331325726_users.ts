@@ -7,7 +7,13 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
 
+      table.string('name', 255).notNullable()
+
+      table.string('nickname', 255).notNullable().unique()
+
       table.string('email', 255).notNullable().unique()
+
+      table.string('color', 50).notNullable()
 
       table.string('password', 180).notNullable()
 
