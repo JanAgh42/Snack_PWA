@@ -10,13 +10,24 @@ export default class Group extends BaseModel {
   @column()
   public name: string
 
-  @column.dateTime({ autoCreate: true })
+  @column()
+  public color: string
+
+  @column.dateTime({
+    serializeAs: null,
+    autoCreate: true
+  })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    serializeAs: null,
+    autoCreate: true,
+    autoUpdate: true
+  })
   public updatedAt: DateTime
 
   @hasMany(() => GroupMessage, {
+    serializeAs: 'groupMessages',
     foreignKey: 'groupId',
   })
   public groupMessages: HasMany<typeof GroupMessage>

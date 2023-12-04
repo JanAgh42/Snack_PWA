@@ -8,6 +8,7 @@ export default class extends BaseSeeder {
     await Group.updateOrCreateMany(uniqueKey, [
       {
         name: 'General',
+        color: 'bg-purple-7'
       },
     ])
   }

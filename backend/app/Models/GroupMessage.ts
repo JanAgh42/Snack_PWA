@@ -20,10 +20,15 @@ export default class GroupMessage extends BaseModel {
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    serializeAs: null,
+    autoCreate: true,
+    autoUpdate: true
+  })
   public updatedAt: DateTime
 
   @belongsTo(() => User, {
+    serializeAs: 'author',
     foreignKey: 'userId',
   })
   public author: BelongsTo<typeof User>

@@ -5,6 +5,9 @@ export default class AppProvider {
 
   public register() {
     // Register your own bindings
+    this.app.container.singleton('Repositories/GroupMessageRepository', (container) => {
+      return container.make('App/Repositories/GroupMessageRepository')
+    })
   }
 
   public async boot() {
