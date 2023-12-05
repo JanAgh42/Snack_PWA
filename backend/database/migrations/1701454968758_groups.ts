@@ -9,6 +9,18 @@ export default class extends BaseSchema {
 
       table.string('name').notNullable().unique()
 
+      table.string('color').notNullable()
+
+      table
+        .integer('owner_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+
+      table.boolean('is_private').notNullable()
+
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

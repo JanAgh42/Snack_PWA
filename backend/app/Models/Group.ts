@@ -5,30 +5,36 @@ import GroupMessage from './GroupMessage'
 
 export default class Group extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: number;
 
   @column()
-  public name: string
+  public name: string;
 
   @column()
-  public color: string
+  public color: string;
+
+  @column()
+  public ownerId: number;
+
+  @column()
+  public isPrivate: boolean;
 
   @column.dateTime({
     serializeAs: null,
     autoCreate: true
   })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({
     serializeAs: null,
     autoCreate: true,
     autoUpdate: true
   })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 
   @hasMany(() => GroupMessage, {
     serializeAs: 'groupMessages',
     foreignKey: 'groupId',
   })
-  public groupMessages: HasMany<typeof GroupMessage>
+  public groupMessages: HasMany<typeof GroupMessage>;
 }

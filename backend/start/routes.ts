@@ -18,15 +18,20 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from '@ioc:Adonis/Core/Route';
 
 Route.get('/', async () => {
-  return { hello: 'world' }
+  return { hello: 'world' };
 })
 
 Route.group(() => {
-  Route.post('register-user', 'AuthenticationController.registerUser')
-  Route.post('login-user', 'AuthenticationController.loginUser')
-  Route.post('logout-user', 'AuthenticationController.logoutUser').middleware('authentication')
-  Route.get('get-current-user', 'AuthenticationController.getCurrentUser').middleware('authentication')
-}).prefix('auth')
+  Route.post('register-user', 'AuthenticationController.registerUser');
+  Route.post('login-user', 'AuthenticationController.loginUser');
+  Route.post('logout-user', 'AuthenticationController.logoutUser').middleware('authentication');
+  Route.get('get-current-user', 'AuthenticationController.getCurrentUser').middleware('authentication');
+}).prefix('auth');
+
+Route.group(() => {
+  Route.post('create-group', 'GroupController.createNewGroup').middleware('authentication');
+  Route.post('join-group', 'GroupController.joinGroup').middleware('authentication');
+}).prefix('groupshttp');
