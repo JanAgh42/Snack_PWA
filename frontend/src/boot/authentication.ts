@@ -28,17 +28,17 @@ export default boot(({ router, store }) => {
   // add route guard to check auth user
   router.beforeEach(async (route) => {
     const authStore = useAuthenticationStore(store);
-    const isAuthenticated = await authStore.verifyAndGetCurrentUser();
 
-    // route requires authentication
-    if (route.meta.requiresAuth && !isAuthenticated) {
-      // check if logged in if not, redirect to login page
-      return loginRoute(route);
+    let isAuthenticated = authStore.isUserAuthenticated;
+
+    if (!isAuthenticated) {
+      if (route.meta.guestOnly) return;
+
+      isAuthenticated = await authStore.verifyAndGetCurrentUser();
     }
 
-    // route is only for guests so redirect to home
-    if (route.meta.guestOnly && isAuthenticated) {
-      return { name: 'Index' };
-    }
+    if (route.meta.requiresAuth && !isAuthenticated) return loginRoute(route);
+
+    if (route.meta.guestOnly && isAuthenticated) return { name: 'Index' };
   });
 });

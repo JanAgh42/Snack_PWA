@@ -7,7 +7,7 @@ import Login from 'src/models/users/login';
 import Token from 'src/models/users/token';
 
 class AuthService {
-  async getCurrentUser(dontTriggerLogout = false): Promise<User | null> {
+  public async getCurrentUser(dontTriggerLogout = false): Promise<User | null> {
     try {
       return (
         await api.get('auth/get-current-user', {
@@ -21,16 +21,16 @@ class AuthService {
     }
   }
 
-  async registerUser(registerData: Register): Promise<User> {
-    return (await api.post<User>('auth/register', registerData)).data;
+  public async registerUser(registerData: Register): Promise<User> {
+    return (await api.post<User>('auth/register-user', registerData)).data;
   }
 
-  async loginUser(loginData: Login): Promise<Token> {
-    return (await api.post<Token>('auth/login', loginData)).data;
+  public async loginUser(loginData: Login): Promise<Token> {
+    return (await api.post<Token>('auth/login-user', loginData)).data;
   }
 
-  async logoutUser(): Promise<void> {
-    await api.post('auth/logout');
+  public async logoutUser(): Promise<void> {
+    await api.post('auth/logout-user');
   }
 }
 

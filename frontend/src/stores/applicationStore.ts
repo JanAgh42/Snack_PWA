@@ -3,13 +3,17 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 export const useApplicationStore = defineStore('app', () => {
-  let usersDrawer = ref(false);
-  let chosenAppPage = ref('');
-  let addGroupModalVisibility = ref(false);
+  const usersDrawer = ref(false);
+  const chosenAppPage = ref('');
+  const addGroupModalVisibility = ref(false);
+  const leaveGroupModalVisibility = ref(false);
+  const logoutModalVisibility = ref(false);
 
   const getUsersDrawer = computed(() => usersDrawer.value);
   const getChosenAppPage = computed(() => chosenAppPage.value);
   const getAddGroupModal = computed(() => addGroupModalVisibility.value);
+  const getLeaveGroupModal = computed(() => leaveGroupModalVisibility.value);
+  const getLogoutModal = computed(() => logoutModalVisibility.value);
 
   function usersDrawerVisible(): void {
     usersDrawer.value = !usersDrawer.value;
@@ -19,19 +23,33 @@ export const useApplicationStore = defineStore('app', () => {
     chosenAppPage.value = page;
   }
 
-  function changeAddGroupModal(): void {
+  function toggleAddGroupModal(): void {
     addGroupModalVisibility.value = !addGroupModalVisibility.value;
+  }
+
+  function toggleLeaveGroupModal(): void {
+    leaveGroupModalVisibility.value = !leaveGroupModalVisibility.value;
+  }
+
+  function toggleLogoutModal(): void {
+    logoutModalVisibility.value = !logoutModalVisibility.value;
   }
 
   return {
     usersDrawer,
     chosenAppPage,
     addGroupModalVisibility,
+    leaveGroupModalVisibility,
+    logoutModalVisibility,
     getUsersDrawer,
     getChosenAppPage,
     getAddGroupModal,
+    getLeaveGroupModal,
+    getLogoutModal,
     usersDrawerVisible,
     changeAppPage,
-    changeAddGroupModal,
+    toggleAddGroupModal,
+    toggleLeaveGroupModal,
+    toggleLogoutModal,
   };
 });

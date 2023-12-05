@@ -52,6 +52,14 @@ export const useAuthenticationStore = defineStore('auth', () => {
     try {
       markAuthStart();
       const currentUser = await authService.getCurrentUser();
+
+      if (currentUser?.id !== state.currentUser?.id) {
+        for (const group of currentUser.groups) {
+          await groupStore.subscribeToGroupSocket(group.name);
+          groupStore.insertNewGroup({ ...group });
+        }
+      }
+
       markAuthSuccess(currentUser);
 
       return state.currentUser !== null;
@@ -101,7 +109,7 @@ export const useAuthenticationStore = defineStore('auth', () => {
     try {
       markAuthStart();
       await authService.logoutUser();
-      await groupStore.leaveAllGroups();
+      await groupStore.unsubscribeFromAllGroupSockets();
       markInit();
 
       authManager.removeToken();
@@ -112,6 +120,7 @@ export const useAuthenticationStore = defineStore('auth', () => {
   }
 
   return {
+    state,
     getCurrentUser,
     isUserAuthenticated,
     isLoading,

@@ -1,6 +1,5 @@
-export default interface Register {
-  name: string;
-  nickname: string;
-  email: string;
+import User from './user';
+
+export default interface Register extends User {
   password: string;
 }

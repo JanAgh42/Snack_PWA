@@ -1,6 +1,6 @@
 export default interface Token {
   type: 'bearer';
-  content: string;
+  token: string;
   expires_at?: string;
   expires_in?: number;
 }
