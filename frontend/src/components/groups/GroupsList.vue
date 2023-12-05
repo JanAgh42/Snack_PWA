@@ -3,7 +3,7 @@
     <article class="q-px-lg q-pt-lg">
       <div class="row justify-between">
         <h6 class="q-mb-sm">Groups</h6>
-        <q-btn flat dense icon="add" @click="appStore.changeAddGroupModal" />
+        <q-btn flat dense icon="add" @click="appStore.toggleAddGroupModal" />
       </div>
       <search-component @captureSearchQuery="processQuery" />
       <template v-if="groupsList.length > 0">
@@ -31,38 +31,22 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useApplicationStore } from 'src/stores/applicationStore';
+import { useGroupStore } from 'src/stores/groupStore';
 import SearchComponent from '../general/SearchComponent.vue';
 import StatusComponent from '../general/StatusComponent.vue';
 import GroupEntry from './GroupEntry.vue';
 
 const appStore = useApplicationStore();
+const groupStore = useGroupStore();
 
-let groups = [
-  {
-    name: 'FirstGroup',
-    color: 'bg-purple-7',
-  },
-  {
-    name: 'SecondGroup',
-    color: 'bg-pink-7',
-  },
-  {
-    name: 'ThirdGroup',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'FourthGroup',
-    color: 'bg-orange-7',
-  },
-];
 let search = ref('');
 
 let groupsList = computed(() =>
   search.value
-    ? groups.filter((group) =>
+    ? groupStore.state.groups.filter((group) =>
         group.name.toLowerCase().includes(search.value.toLowerCase())
       )
-    : groups
+    : groupStore.state.groups
 );
 
 function processQuery(value: string): void {

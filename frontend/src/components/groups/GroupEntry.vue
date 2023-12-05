@@ -1,12 +1,12 @@
 <template>
   <q-item
     clickable
-    :active="store.getChosenGroup == props.group.name"
+    :active="groupStore.getChosenGroup?.name == props.group.name"
     active-class="active-color"
     @click="chooseGroup"
   >
     <q-item-section avatar>
-      <q-avatar :class="props.group.color" rounded>{{
+      <q-avatar :class="group.color" rounded>{{
         props.group.name.charAt(0).toUpperCase()
       }}</q-avatar>
     </q-item-section>
@@ -20,12 +20,16 @@
 
 <script setup lang="ts">
 import { useGroupStore } from '../../stores/groupStore';
+import Group from 'src/models/users/group';
 
-const props = defineProps(['group']);
-const store = useGroupStore();
+const props = defineProps<{
+  group: Group;
+}>();
+
+const groupStore = useGroupStore();
 
 function chooseGroup() {
-  store.changeChosenGroup(props.group.name);
+  groupStore.changeActiveGroup(props.group.name);
 }
 </script>
 

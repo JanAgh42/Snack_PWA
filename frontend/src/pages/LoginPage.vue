@@ -35,11 +35,11 @@
         />
 
         <q-btn
-          type="submit"
+          type="button"
           label="Sign In"
           color="indigo-7"
           class="text-capitalize"
-          :loading="loginLoading"
+          :loading="authStore.isLoading"
           @click="loginUser"
           rounded
           push
@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import { reactive } from 'vue';
 import { useApplicationStore } from 'src/stores/applicationStore';
 import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useRouter } from 'vue-router';
@@ -64,8 +64,6 @@ import Login from 'src/models/users/login';
 const router = useRouter();
 const appStore = useApplicationStore();
 const authStore = useAuthenticationStore();
-
-const loginLoading = computed(() => authStore.status === 'pending');
 
 const login: Login = reactive({
   email: '',

@@ -7,7 +7,7 @@
       <q-form class="column items-center input-max-width">
         <q-input
           v-model="name"
-          label="Firstname"
+          label="Name"
           label-color="grey-7"
           type="text"
           class="input-max-width border"
@@ -18,7 +18,8 @@
         />
 
         <q-input
-          v-model="nickname"
+          v-once
+          v-model="currentUser.nickname"
           label="Nickname"
           label-color="grey-7"
           type="text"
@@ -30,7 +31,8 @@
         />
 
         <q-input
-          v-model="email"
+          v-once
+          v-model="currentUser.email"
           label="Email"
           label-color="grey-7"
           type="email"
@@ -74,7 +76,7 @@
           label="Log out"
           color="red-7"
           class="text-capitalize rounded-borders"
-          @click="() => $router.push({ name: 'Main' })"
+          @click="logoutUser"
           push
         />
       </div>
@@ -83,27 +85,30 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from 'src/stores/userStore';
-import { ref, onMounted } from 'vue';
+import { useAuthenticationStore } from 'src/stores/authenticationStore';
+import { useApplicationStore } from 'src/stores/applicationStore';
+import { ref, onMounted, computed } from 'vue';
 
-const userStore = useUserStore();
+const authStore = useAuthenticationStore();
+const appStore = useApplicationStore();
 
 let name = ref('');
-let nickname = ref('');
-let email = ref('');
-
 let isEditing = ref(null);
+
+const currentUser = computed(() => authStore.getCurrentUser);
 
 function loadUserData() {
   isEditing.value = false;
-  name.value = userStore.getCurrentUser.name;
-  nickname.value = userStore.getCurrentUser.nickname;
-  email.value = userStore.getCurrentUser.email;
+  name.value = currentUser.value.name;
 }
 
 function saveUserData() {
   isEditing.value = false;
-  userStore.$state.current.name = name.value;
+  authStore.getCurrentUser.name = name.value;
+}
+
+async function logoutUser(): Promise<void> {
+  appStore.toggleLogoutModal();
 }
 
 onMounted(() => loadUserData());

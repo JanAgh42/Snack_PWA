@@ -10,7 +10,7 @@
       >
     </q-item-section>
     <q-item-section>
-      <q-item-label class="truncate full-width nickname-color"
+      <q-item-label class="truncate full-width"
         >{{ currentUser.nickname }}
       </q-item-label>
       <q-item-label caption class="real-name-color truncate full-width">{{
@@ -26,18 +26,18 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from 'src/stores/userStore';
 import { useStatusStore } from 'src/stores/statusStore';
 import { useApplicationStore } from 'src/stores/applicationStore';
+import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
 
 const router = useRouter();
-const userStore = useUserStore();
+const authStore = useAuthenticationStore();
 const statusStore = useStatusStore();
 const appStore = useApplicationStore();
 
-const currentUser = computed(() => userStore.getCurrentUser);
+const currentUser = computed(() => authStore.getCurrentUser);
 const userStatus = computed(() => statusStore.states.online);
 
 function showProfile(): void {
@@ -47,10 +47,6 @@ function showProfile(): void {
 </script>
 
 <style scoped lang="scss">
-.real-name-color {
-  color: $darker;
-}
-
 .full-width {
   max-width: 150px;
 }

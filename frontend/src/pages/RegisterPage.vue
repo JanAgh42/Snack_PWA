@@ -60,11 +60,11 @@
         />
 
         <q-btn
-          type="submit"
+          type="button"
           label="Create account"
           color="indigo-7"
           class="text-capitalize"
-          :loading="registerLoading"
+          :loading="authStore.isLoading"
           @click="registerUser"
           rounded
           push
@@ -80,21 +80,22 @@
 
 <script setup lang="ts">
 import { useAuthenticationStore } from 'src/stores/authenticationStore';
+import { useApplicationStore } from 'src/stores/applicationStore';
 import { useRouter } from 'vue-router';
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive } from 'vue';
 
 import Register from 'src/models/users/register';
 
 const router = useRouter();
+const appStore = useApplicationStore();
 const authStore = useAuthenticationStore();
-
-const registerLoading = computed(() => authStore.status === 'pending');
 
 const register: Register = reactive({
   name: '',
   nickname: '',
   email: '',
   password: '',
+  color: 'bg-blue-7',
 });
 
 let confirmPassword = ref('');
@@ -103,9 +104,10 @@ async function registerUser(): Promise<void> {
   if (register.password !== confirmPassword.value) {
     return;
   }
-
   await authStore.registerUser(register);
-  router.push({ name: 'Login' });
+
+  appStore.changeAppPage('');
+  router.push({ name: 'Index' });
 }
 </script>
 

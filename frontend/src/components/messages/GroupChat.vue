@@ -1,8 +1,22 @@
 <template>
-  <article v-if="store.getChosenGroup" class="q-pt-lg column">
-    <h6 class="q-pb-sm q-pl-lg group-name-border">
-      {{ store.getChosenGroup }}
-    </h6>
+  <article v-if="groupStore.getChosenGroup" class="column">
+    <section class="row justify-between group-name-border q-mt-md q-pb-sm">
+      <div class="min-width">
+        <p class="q-pl-lg q-mb-none real-name-color small-line-height">
+          {{ groupStore.getChosenGroup?.isPrivate ? 'private' : 'public' }}
+        </p>
+        <h6 class="q-pl-lg small-line-height truncate">
+          {{ groupStore.getChosenGroup.name }}
+        </h6>
+      </div>
+      <q-btn
+        flat
+        dense
+        class="q-mr-md real-name-color text-capitalize"
+        @click="appStore.toggleLeaveGroupModal"
+        >Leave</q-btn
+      >
+    </section>
     <q-infinite-scroll
       @load="onLoad"
       :offset="1000"
@@ -16,8 +30,11 @@
         </div>
       </template>
 
-      <template v-for="(item, index) in items" :key="index">
-        <group-message />
+      <template
+        v-for="(message, index) in groupStore.getMessagesOfActiveGroup"
+        :key="index"
+      >
+        <group-message :message="message" />
       </template>
     </q-infinite-scroll>
   </article>
@@ -32,21 +49,26 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useGroupStore } from '../../stores/groupStore';
+import { useApplicationStore } from 'src/stores/applicationStore';
 import GroupMessage from './GroupMessage.vue';
 
-const store = useGroupStore();
+const appStore = useApplicationStore();
+const groupStore = useGroupStore();
 
 const items = ref([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]);
 
 function onLoad(index: any, done: any) {
   setTimeout(() => {
-    items.value.splice(0, 0, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});
     done();
   }, 2000);
 }
 </script>
 
 <style scoped lang="scss">
+.small-line-height {
+  line-height: normal;
+}
+
 .scroll-size {
   max-height: calc(100vh - 180px);
   min-height: calc(100vh - 180px);
@@ -54,6 +76,11 @@ function onLoad(index: any, done: any) {
 
 .group-name-border {
   border-bottom: 2px solid $primary;
+}
+
+.min-width {
+  flex: 1;
+  min-width: 0;
 }
 
 .track::-webkit-scrollbar-track {
