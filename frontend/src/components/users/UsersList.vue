@@ -3,13 +3,17 @@
     <h6 class="q-mb-sm">Group members</h6>
     <div id="virtual-scroll-target" :style="style" class="height" ref="target">
       <q-virtual-scroll
-        :items="groupMembersList"
+        :items="groupStore.getUsersOfActiveGroup"
         separator
         v-slot="{ item }"
         class="q-mt-sm"
         scroll-target="#virtual-scroll-target"
       >
-        <user-entry :member="item" :status="statusStore.states.offline" />
+        <user-entry
+          :member="item"
+          :group-owner="groupStore.getActiveGroup.ownerId"
+          :status="statusStore.states.offline"
+        />
       </q-virtual-scroll>
     </div>
   </article>
@@ -18,90 +22,17 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import { useStatusStore } from 'src/stores/statusStore';
+import { useGroupStore } from 'src/stores/groupStore';
 import UserEntry from './UserEntry.vue';
 
 const statusStore = useStatusStore();
+const groupStore = useGroupStore();
 
 let target = ref(null);
 
 let style = reactive({
   maxHeight: '0px',
 });
-
-let groupMembersList = [
-  {
-    name: 'FirstMember',
-    color: 'bg-indigo-7',
-  },
-  {
-    name: 'SecondMember',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'ThirdMember',
-    color: 'bg-red-7',
-  },
-  {
-    name: 'FirstMember',
-    color: 'bg-indigo-7',
-  },
-  {
-    name: 'SecondMember',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'ThirdMember',
-    color: 'bg-red-7',
-  },
-  {
-    name: 'FirstMember',
-    color: 'bg-indigo-7',
-  },
-  {
-    name: 'SecondMember',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'ThirdMember',
-    color: 'bg-red-7',
-  },
-  {
-    name: 'FirstMember',
-    color: 'bg-indigo-7',
-  },
-  {
-    name: 'SecondMember',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'ThirdMember',
-    color: 'bg-red-7',
-  },
-  {
-    name: 'FirstMember',
-    color: 'bg-indigo-7',
-  },
-  {
-    name: 'SecondMember',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'ThirdMember',
-    color: 'bg-red-7',
-  },
-  {
-    name: 'FirstMember',
-    color: 'bg-indigo-7',
-  },
-  {
-    name: 'SecondMember',
-    color: 'bg-green-7',
-  },
-  {
-    name: 'ThirdMember',
-    color: 'bg-red-7',
-  },
-];
 
 const calculateHeight = () => {
   if (target.value) {
@@ -122,9 +53,5 @@ onUnmounted(() => window.removeEventListener('resize', calculateHeight));
 <style scoped lang="scss">
 .userlist-border {
   border-left: 2px solid $primary;
-}
-
-.height {
-  overflow-y: auto;
 }
 </style>

@@ -37,8 +37,12 @@ class GroupService {
     return (await api.post<Group>('groupshttp/create-group', group)).data;
   }
 
-  public async joinGroup(groupName: string) {
-    return (await api.post<Group>('groupshttp/join-group', { groupName })).data;
+  public async checkIfGroupExists(groupName: string) {
+    return (await api.get<Group>(`groupshttp/${groupName}/exists`)).data;
+  }
+
+  public async checkIfGroupIsPrivate(groupName: string) {
+    return (await api.get<Group>(`groupshttp/${groupName}/type`)).data;
   }
 }
 
