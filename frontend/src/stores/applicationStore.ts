@@ -4,16 +4,23 @@ import { ref, computed } from 'vue';
 
 export const useApplicationStore = defineStore('app', () => {
   const usersDrawer = ref(false);
-  const chosenAppPage = ref('');
   const addGroupModalVisibility = ref(false);
   const leaveGroupModalVisibility = ref(false);
   const logoutModalVisibility = ref(false);
+  const groupMembersModalVisibility = ref(false);
+
+  const groupNameForModal = ref('');
+  const chosenAppPage = ref('');
 
   const getUsersDrawer = computed(() => usersDrawer.value);
   const getChosenAppPage = computed(() => chosenAppPage.value);
   const getAddGroupModal = computed(() => addGroupModalVisibility.value);
   const getLeaveGroupModal = computed(() => leaveGroupModalVisibility.value);
   const getLogoutModal = computed(() => logoutModalVisibility.value);
+  const getGroupNameForModal = computed(() => groupNameForModal.value);
+  const getGroupMembersModal = computed(
+    () => groupMembersModalVisibility.value
+  );
 
   function usersDrawerVisible(): void {
     usersDrawer.value = !usersDrawer.value;
@@ -35,7 +42,17 @@ export const useApplicationStore = defineStore('app', () => {
     logoutModalVisibility.value = !logoutModalVisibility.value;
   }
 
+  function toggleGroupMembersModal(): void {
+    groupMembersModalVisibility.value = !groupMembersModalVisibility.value;
+  }
+
+  function setGroupNameForModal(groupName: string): void {
+    groupNameForModal.value = groupName;
+  }
+
   return {
+    getGroupNameForModal,
+    setGroupNameForModal,
     usersDrawer,
     chosenAppPage,
     addGroupModalVisibility,
@@ -46,10 +63,12 @@ export const useApplicationStore = defineStore('app', () => {
     getAddGroupModal,
     getLeaveGroupModal,
     getLogoutModal,
+    getGroupMembersModal,
     usersDrawerVisible,
     changeAppPage,
     toggleAddGroupModal,
     toggleLeaveGroupModal,
     toggleLogoutModal,
+    toggleGroupMembersModal,
   };
 });

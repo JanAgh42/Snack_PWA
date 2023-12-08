@@ -81,6 +81,7 @@
 <script setup lang="ts">
 import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useApplicationStore } from 'src/stores/applicationStore';
+import { colorValues } from 'src/enums/colors';
 import { useRouter } from 'vue-router';
 import { ref, reactive } from 'vue';
 
@@ -95,16 +96,18 @@ const register: Register = reactive({
   nickname: '',
   email: '',
   password: '',
-  color: 'bg-blue-7',
+  color: '',
 });
 
 let confirmPassword = ref('');
 
 async function registerUser(): Promise<void> {
+  register.color = colorValues[Math.floor(Math.random() * colorValues.length)];
+
   if (register.password !== confirmPassword.value) {
     return;
   }
-  await authStore.registerUser(register);
+  await authStore.registerUser({ ...register });
 
   appStore.changeAppPage('');
   router.push({ name: 'Index' });

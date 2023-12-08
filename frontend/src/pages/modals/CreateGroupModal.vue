@@ -63,10 +63,13 @@ const newGroup: Group = reactive({
 async function createNewGroup(): Promise<void> {
   newGroup.color = colorValues[Math.floor(Math.random() * colorValues.length)];
 
-  await groupStore.createNewGroup(newGroup);
+  await groupStore.createNewGroup({ ...newGroup });
 
   if (groupStore.state.error) return;
 
+  newGroup.name = '';
+  newGroup.isPrivate = false;
+  newGroup.color = '';
   appStore.toggleAddGroupModal();
 }
 </script>

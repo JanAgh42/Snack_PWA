@@ -1,12 +1,12 @@
 <template>
-  <article v-if="groupStore.getChosenGroup" class="column">
+  <article v-if="groupStore.getActiveGroup" class="column">
     <section class="row justify-between group-name-border q-mt-md q-pb-sm">
       <div class="min-width">
         <p class="q-pl-lg q-mb-none real-name-color small-line-height">
-          {{ groupStore.getChosenGroup?.isPrivate ? 'private' : 'public' }}
+          {{ groupStore.getActiveGroup?.isPrivate ? 'private' : 'public' }}
         </p>
         <h6 class="q-pl-lg small-line-height truncate">
-          {{ groupStore.getChosenGroup.name }}
+          {{ groupStore.getActiveGroup.name }}
         </h6>
       </div>
       <q-btn
@@ -18,22 +18,18 @@
       >
     </section>
     <q-infinite-scroll
-      @load="onLoad"
-      :offset="1000"
-      :debounce="200"
+      @load="triggerLoad"
+      :offset="300"
       class="scroll-size overflow-auto q-mx-lg track"
       reverse
     >
-      <template v-slot:loading>
+      <template #loading>
         <div class="row justify-center q-my-md">
           <q-spinner-hourglass color="primary" name="dots" size="50px" />
         </div>
       </template>
 
-      <template
-        v-for="(message, index) in groupStore.getMessagesOfActiveGroup"
-        :key="index"
-      >
+      <template v-for="message in messageList" :key="message.id.toString()">
         <group-message :message="message" />
       </template>
     </q-infinite-scroll>
@@ -47,18 +43,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { useGroupStore } from '../../stores/groupStore';
 import { useApplicationStore } from 'src/stores/applicationStore';
 import GroupMessage from './GroupMessage.vue';
+import { Message, TypedMessage } from 'src/models/users/message';
 
 const appStore = useApplicationStore();
 const groupStore = useGroupStore();
 
-const items = ref([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]);
+const messageList = computed(() =>
+  groupStore.getTypedOfActiveGroup
+    ? ([].concat(
+        groupStore.getMessagesOfActiveGroup,
+        groupStore.getTypedOfActiveGroup
+      ) as (Message | TypedMessage)[])
+    : groupStore.getMessagesOfActiveGroup
+);
 
-function onLoad(index: any, done: any) {
+function triggerLoad(index: any, done: any) {
   setTimeout(() => {
+    (async () => await groupStore.loadAnotherGroupOfMessages())();
     done();
   }, 2000);
 }

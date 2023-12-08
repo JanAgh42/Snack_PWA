@@ -29,13 +29,17 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useApplicationStore } from '../../stores/applicationStore';
 import { useGroupStore } from 'src/stores/groupStore';
 
 const appStore = useApplicationStore();
 const groupStore = useGroupStore();
+const authStore = useAuthenticationStore();
 
 async function leaveGroup(): Promise<void> {
+  await groupStore.removeMyselfFromGroup(authStore.getCurrentUser.id);
+
   if (groupStore.state.error) return;
 
   appStore.toggleLeaveGroupModal();

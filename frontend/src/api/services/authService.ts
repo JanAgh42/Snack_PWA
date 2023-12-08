@@ -1,7 +1,7 @@
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import { api } from 'src/boot/axios';
 
-import User from 'src/models/users/user';
+import { User } from 'src/models/users/user';
 import Register from 'src/models/users/register';
 import Login from 'src/models/users/login';
 import Token from 'src/models/users/token';
