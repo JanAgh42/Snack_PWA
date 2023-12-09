@@ -14,7 +14,9 @@ export default class GroupMessage extends BaseModel {
   @column()
   public groupId: number
 
-  @column()
+  @column({
+    serializeAs: 'content'
+  })
   public textContent: string
 
   @column.dateTime({ autoCreate: true })

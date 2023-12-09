@@ -1,6 +1,7 @@
 import { inject } from '@adonisjs/core/build/standalone';
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { GroupJSON, IGroupRepository } from '@ioc:Repositories/GroupRepository'
+import Group from 'App/Models/Group';
 
 import GroupValidator from 'App/Validators/GroupValidator'
 
@@ -8,17 +9,22 @@ import GroupValidator from 'App/Validators/GroupValidator'
 export default class GroupController {
   constructor (private groupRepository: IGroupRepository) {}
 
-  async createNewGroup({ request, auth }: HttpContextContract): Promise<GroupJSON> {
+  public async createNewGroup({ request, auth }: HttpContextContract): Promise<GroupJSON> {
     const data = await request.validate(GroupValidator);
     const group = await this.groupRepository.createNewGroup(data.name, data.color, data.isPrivate, auth.user!);
 
     return group;
   }
 
-  async joinGroup({ request, auth }: HttpContextContract): Promise<GroupJSON> {
-    const groupName = request.input('groupName');
-    const group = await this.groupRepository.joinGroup(groupName, auth.user!);
+  public async checkIfGroupExists({ params }: HttpContextContract): Promise<boolean> {
+    const group = await Group.findBy('name', params.name);
 
-    return group;
+    return group !== null;
+  }
+
+  public async checkIfGroupIsPrivate({ params }: HttpContextContract): Promise<boolean> {
+    const group = await Group.findBy('name', params.name);
+
+    return group!.isPrivate;
   }
 }

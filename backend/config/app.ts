@@ -148,6 +148,10 @@ export const logger: LoggerConfig = {
   |
   */
   name: Env.get('APP_NAME'),
+  transport: 'console',
+  console: {
+    driver: 'console'
+  },
 
   /*
   |--------------------------------------------------------------------------

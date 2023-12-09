@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, column, hasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 
 import GroupMessage from './GroupMessage'
+import User from './User';
 
 export default class Group extends BaseModel {
   @column({ isPrimary: true })
@@ -37,4 +38,12 @@ export default class Group extends BaseModel {
     foreignKey: 'groupId',
   })
   public groupMessages: HasMany<typeof GroupMessage>;
+
+  @manyToMany(() => User, {
+    pivotTable: 'groups_users',
+    pivotForeignKey: 'group_id',
+    pivotRelatedForeignKey: 'user_id',
+    pivotTimestamps: true,
+  })
+  public users: ManyToMany<typeof User>
 }

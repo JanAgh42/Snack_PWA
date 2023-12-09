@@ -33,5 +33,6 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post('create-group', 'GroupController.createNewGroup').middleware('authentication');
-  Route.post('join-group', 'GroupController.joinGroup').middleware('authentication');
+  Route.get(':name/exists', 'GroupController.checkIfGroupExists').middleware('authentication');
+  Route.get(':name/type', 'GroupController.checkIfGroupIsPrivate').middleware('authentication');
 }).prefix('groupshttp');

@@ -11,7 +11,7 @@ export default class RegisterValidator {
     ]),
     nickname: schema.string([
       rules.trim(),
-      rules.regex(/[\w-]+/),
+      rules.regex(/[\w]+/),
       rules.minLength(5),
       rules.unique({ table: 'users', column: 'nickname' })
     ]),

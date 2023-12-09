@@ -1,7 +1,9 @@
 // here we are declaring our MessageRepository types for Repositories/MessageRepository
 // container binding. See providers/AppProvider.ts for how we are binding the implementation
 
-declare module '@ioc:Repositories/GroupMessageRepository' {
+declare module '@ioc:Repositories/WsGroupRepository' {
+  import type { GroupJSON } from "@ioc:Repositories/GroupRepository";
+
   export interface GroupMessageJSON {
     id: number;
     userId: number;
@@ -17,12 +19,21 @@ declare module '@ioc:Repositories/GroupMessageRepository' {
     };
   }
 
-  export interface IGroupMessageRepository {
-    getMessagesByGroupName(groupName: string): Promise<GroupMessageJSON[]>;
-    createGroupMessage(groupName: string, userId: number, content: string): Promise<GroupMessageJSON>;
+  export interface GroupUserJSON {
+    id: number;
+    nickname: string;
+    color: string;
   }
 
-  export const GroupMessageRepository: IGroupMessageRepository;
+  export interface IWsGroupRepository {
+    getMessagesByGroupName(groupName: string, date: string): Promise<GroupMessageJSON[]>;
+    createGroupMessage(groupName: string, userId: number, content: string): Promise<GroupMessageJSON>;
+    getUsersByGroupName(groupName: string): Promise<GroupUserJSON[]>;
+    joinUserToGroup(groupName: string, userName: string): Promise<{ groupJSON: GroupJSON, userJSON: GroupUserJSON }>;
+    removeUserFromGroup(groupName: string, userId: number, authId: number): Promise<boolean>;
+  }
+
+  export const WsGroupRepository: IWsGroupRepository;
 }
 
 declare module '@ioc:Repositories/GroupRepository' {
@@ -38,7 +49,6 @@ declare module '@ioc:Repositories/GroupRepository' {
 
   export interface IGroupRepository {
     createNewGroup(groupName: string, color: string, isPrivate: boolean, user: User): Promise<GroupJSON>;
-    joinGroup(groupName: string, user: User): Promise<GroupJSON>;
   }
 
   export const GroupRepository: IGroupRepository;

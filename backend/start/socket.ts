@@ -9,20 +9,22 @@
 
 import Ws from '@ioc:Ruby184/Socket.IO/Ws'
 
-Ws.namespace('/')
-  .connected(({ socket }) => {
-    console.log('new websocket connection: ', socket.id)
+Ws.namespace('common')
+  .connected(({ socket, auth }) => {
+    socket.join(`user:${auth.user!.id}`);
   })
-  .disconnected(({ socket }, reason) => {
-    console.log('websocket disconnecting: ', socket.id, reason)
-  })
-  .on('hello', ({ socket }, msg: string) => {
-    console.log('websocket greeted: ', socket.id, msg)
-    return 'hi'
-  })
+  // .disconnected(({ socket, auth }) => {
+  //   socket.leave(`user:${auth.user!.id}`)
+  // })
+  .on('inviteToJoinGroup', 'WsGroupController.inviteToJoinGroup')
 
 // this is dynamic namespace, in controller methods we can use params.name
 Ws.namespace('groups/:name')
   // .middleware('channel') // check if user can join given channel
-  .on('loadGroupMessages', 'GroupMessageController.loadGroupMessages')
-  .on('addGroupMessage', 'GroupMessageController.addGroupMessage')
+  .on('loadGroupMessages', 'WsGroupController.loadGroupMessages')
+  .on('addGroupMessage', 'WsGroupController.addGroupMessage')
+  .on('loadGroupUsers', 'WsGroupController.loadGroupUsers')
+  .on('joinUserToGroup', 'WsGroupController.joinUserToGroup')
+  .on('removeUserFromGroup', 'WsGroupController.removeUserFromGroup')
+  .on('userStartedTyping', 'WsGroupController.userStartedTyping')
+  .on('userStoppedTyping', 'WsGroupController.userStoppedTyping')

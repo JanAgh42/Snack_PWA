@@ -11,12 +11,4 @@ export default class GroupRepository implements IGroupRepository {
 
     return group.serialize() as GroupJSON;
   }
-
-  public async joinGroup(groupName: string, user: User): Promise<GroupJSON> {
-    const group = await Group.findByOrFail('name', groupName);
-
-    await user.related('groups').attach([group.id]);
-
-    return group.serialize() as GroupJSON;
-  }
 }

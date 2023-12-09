@@ -5,8 +5,8 @@ export default class AppProvider {
 
   public register() {
     // Register your own bindings
-    this.app.container.singleton('Repositories/GroupMessageRepository', (container) => {
-      return container.make('App/Repositories/GroupMessageRepository');
+    this.app.container.singleton('Repositories/WsGroupRepository', (container) => {
+      return container.make('App/Repositories/WsGroupRepository');
     });
 
     this.app.container.singleton('Repositories/GroupRepository', (container) => {
