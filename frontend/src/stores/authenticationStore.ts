@@ -5,12 +5,14 @@ import { reactive, computed } from 'vue';
 import AuthenticationState from 'src/models/users/authenticationState';
 import authManager from 'src/api/managers/authManager';
 import authService from 'src/api/services/authService';
+import commonService from 'src/api/services/commonService';
 import { useGroupStore } from './groupStore';
+import { useCommandLineStore } from './cmdStore';
 
 import Register from 'src/models/users/register';
 import Token from 'src/models/users/token';
 import Login from 'src/models/users/login';
-import User from 'src/models/users/user';
+import { User } from 'src/models/users/user';
 
 export const useAuthenticationStore = defineStore('auth', () => {
   const state: AuthenticationState = reactive({
@@ -20,6 +22,7 @@ export const useAuthenticationStore = defineStore('auth', () => {
   });
 
   const groupStore = useGroupStore();
+  const cmdStore = useCommandLineStore();
 
   const getCurrentUser = computed(() => state.currentUser);
   const isLoading = computed(() => state.status === 'pending');
@@ -58,6 +61,7 @@ export const useAuthenticationStore = defineStore('auth', () => {
           await groupStore.subscribeToGroupSocket(group.name);
           groupStore.insertNewGroup({ ...group });
         }
+        commonService.subscribeToCommonSocket();
       }
 
       markAuthSuccess(currentUser);
@@ -76,6 +80,7 @@ export const useAuthenticationStore = defineStore('auth', () => {
       markAuthSuccess(null);
 
       authManager.setToken(loginToken.token);
+
       return loginToken;
     } catch (errors: any) {
       markAuthFailure(errors as []);
@@ -98,6 +103,8 @@ export const useAuthenticationStore = defineStore('auth', () => {
       markAuthSuccess(currentUser);
 
       authManager.setToken(loginToken.token);
+      commonService.subscribeToCommonSocket();
+
       return currentUser;
     } catch (errors: any) {
       markAuthFailure(errors as []);
@@ -108,8 +115,17 @@ export const useAuthenticationStore = defineStore('auth', () => {
   async function logoutUser(): Promise<void> {
     try {
       markAuthStart();
+      if (cmdStore.commandLineInput) {
+        cmdStore.clearCommandLineInput();
+        await groupStore.userStoppedTyping(state.currentUser.nickname);
+      }
+
+      groupStore.changeActiveGroup();
+
       await authService.logoutUser();
-      await groupStore.unsubscribeFromAllGroupSockets();
+
+      groupStore.unsubscribeFromAllGroupSockets();
+      commonService.unsubscribeFromCommonSocket();
       markInit();
 
       authManager.removeToken();

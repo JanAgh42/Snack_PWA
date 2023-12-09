@@ -16,12 +16,14 @@
   <create-group-modal />
   <leave-group-modal />
   <logout-modal />
+  <group-members-modal />
 </template>
 
 <script setup lang="ts">
 import CreateGroupModal from '../pages/modals/CreateGroupModal.vue';
 import LeaveGroupModal from 'src/pages/modals/LeaveGroupModal.vue';
 import LogoutModal from 'src/pages/modals/LogoutModal.vue';
+import GroupMembersModal from 'src/pages/modals/GroupMembersModal.vue';
 import VerticalNavbar from 'src/components/navigation/VerticalNavbar.vue';
 import HorizontalNavbar from 'src/components/navigation/HorizontalNavbar.vue';
 import CommandLineComponent from 'src/components/general/CommandLineComponent.vue';

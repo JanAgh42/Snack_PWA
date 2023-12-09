@@ -1,7 +1,7 @@
 <template>
   <q-item
     clickable
-    :active="groupStore.getChosenGroup?.name == props.group.name"
+    :active="groupStore.getActiveGroup?.name == props.group.name"
     active-class="active-color"
     @click="chooseGroup"
   >
@@ -20,6 +20,8 @@
 
 <script setup lang="ts">
 import { useGroupStore } from '../../stores/groupStore';
+import { useCommandLineStore } from 'src/stores/cmdStore';
+import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import Group from 'src/models/users/group';
 
 const props = defineProps<{
@@ -27,8 +29,15 @@ const props = defineProps<{
 }>();
 
 const groupStore = useGroupStore();
+const cmdStore = useCommandLineStore();
+const authStore = useAuthenticationStore();
 
-function chooseGroup() {
+async function chooseGroup() {
+  if (cmdStore.commandLineInput) {
+    cmdStore.clearCommandLineInput();
+    await groupStore.userStoppedTyping(authStore.getCurrentUser.nickname);
+  }
+
   groupStore.changeActiveGroup(props.group.name);
 }
 </script>
