@@ -7,6 +7,7 @@ export default class RegisterValidator {
   public schema = schema.create({
     name: schema.string([
       rules.trim(),
+      rules.minLength(1),
       rules.regex(/[a-zA-Z][a-zA-Z ]+/)
     ]),
     nickname: schema.string([
@@ -20,6 +21,7 @@ export default class RegisterValidator {
       rules.unique({ table: 'users', column: 'email' })
     ]),
     color: schema.string(),
+    status: schema.string(),
     password: schema.string([
       rules.minLength(8)
     ])

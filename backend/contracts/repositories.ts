@@ -23,6 +23,7 @@ declare module '@ioc:Repositories/WsGroupRepository' {
     id: number;
     nickname: string;
     color: string;
+    status: string;
   }
 
   export interface IWsGroupRepository {

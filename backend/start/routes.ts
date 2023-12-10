@@ -28,8 +28,12 @@ Route.group(() => {
   Route.post('register-user', 'AuthenticationController.registerUser');
   Route.post('login-user', 'AuthenticationController.loginUser');
   Route.post('logout-user', 'AuthenticationController.logoutUser').middleware('authentication');
-  Route.get('get-current-user', 'AuthenticationController.getCurrentUser').middleware('authentication');
 }).prefix('auth');
+
+Route.group(() => {
+  Route.get('get-current-user', 'UserController.getCurrentUser').middleware('authentication');
+  Route.patch('edit-user', 'UserController.editUserData').middleware('authentication');
+}).prefix('users');
 
 Route.group(() => {
   Route.post('create-group', 'GroupController.createNewGroup').middleware('authentication');

@@ -43,13 +43,6 @@ export default class WsGroupController {
     return userId;
   }
 
-  public async inviteToJoinGroup({ auth, socket }: WsContextContract, groupName: string, userName: string): Promise<void> {
-    const JSONs = await this.wsGroupRepository.joinUserToGroup(groupName, userName);
-
-    socket.nsp.except(`user:${JSONs.userJSON.id}`).emit('newGroupUser', groupName, JSONs.userJSON);
-    socket.to(`user:${JSONs.userJSON.id}`).emit('invitedToJoinGroup', JSONs.groupJSON, auth.user!.id === JSONs.groupJSON.ownerId ? true : false);
-  }
-
   public async userStartedTyping({ socket }: WsContextContract, typedMessage: string, userName: string): Promise<void> {
     socket.broadcast.emit('startedTyping', typedMessage, userName);
   }

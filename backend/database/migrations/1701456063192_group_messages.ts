@@ -23,7 +23,7 @@ export default class extends BaseSchema {
         .inTable('groups')
         .onDelete('CASCADE')
 
-      table.string('text_content').notNullable()
+      table.text('text_content').notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

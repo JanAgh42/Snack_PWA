@@ -32,6 +32,11 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string
 
+  @column({
+    serializeAs: 'status'
+  })
+  public status: string
+
   @hasMany(() => GroupMessage, {
     foreignKey: 'user_id',
   })

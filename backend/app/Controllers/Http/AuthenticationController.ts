@@ -16,8 +16,9 @@ export default class AuthenticationController {
   public async loginUser({ auth, request }: HttpContextContract): Promise<OpaqueTokenContract<User>> {
     const email = request.input('email');
     const password = request.input('password');
+    const rememberMe = request.input('rememberMe');
 
-    return auth.use('api').attempt(email, password);
+    return auth.use('api').attempt(email, password, rememberMe);
   }
 
   public async logoutUser({ auth }: HttpContextContract): Promise<void> {

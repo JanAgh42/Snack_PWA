@@ -10,17 +10,15 @@
 import Ws from '@ioc:Ruby184/Socket.IO/Ws'
 
 Ws.namespace('common')
-  .connected(({ socket, auth }) => {
-    socket.join(`user:${auth.user!.id}`);
-  })
-  // .disconnected(({ socket, auth }) => {
-  //   socket.leave(`user:${auth.user!.id}`)
-  // })
-  .on('inviteToJoinGroup', 'WsGroupController.inviteToJoinGroup')
+  .connected('WsCommonController.userIsOnline')
+  .disconnecting('WsCommonController.userIsOffline')
+  .on('inviteToJoinGroup', 'WsCommonController.inviteToJoinGroup')
 
 // this is dynamic namespace, in controller methods we can use params.name
 Ws.namespace('groups/:name')
-  // .middleware('channel') // check if user can join given channel
+  .connected('WsUserStatusController.notifyAboutOnlineStatus')
+  .disconnecting('WsUserStatusController.notifyAboutOfflineStatus')
+  .on('userChangedStatus', 'WsUserStatusController.notifyAboutAnyStatus')
   .on('loadGroupMessages', 'WsGroupController.loadGroupMessages')
   .on('addGroupMessage', 'WsGroupController.addGroupMessage')
   .on('loadGroupUsers', 'WsGroupController.loadGroupUsers')
