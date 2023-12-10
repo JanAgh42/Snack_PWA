@@ -14,6 +14,7 @@ export const useApplicationStore = defineStore('app', () => {
 
   const getUsersDrawer = computed(() => usersDrawer.value);
   const getChosenAppPage = computed(() => chosenAppPage.value);
+  const getAppPageRef = computed(() => chosenAppPage);
   const getAddGroupModal = computed(() => addGroupModalVisibility.value);
   const getLeaveGroupModal = computed(() => leaveGroupModalVisibility.value);
   const getLogoutModal = computed(() => logoutModalVisibility.value);
@@ -64,6 +65,7 @@ export const useApplicationStore = defineStore('app', () => {
     getLeaveGroupModal,
     getLogoutModal,
     getGroupMembersModal,
+    getAppPageRef,
     usersDrawerVisible,
     changeAppPage,
     toggleAddGroupModal,

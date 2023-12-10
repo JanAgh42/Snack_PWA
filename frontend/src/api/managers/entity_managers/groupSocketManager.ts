@@ -29,16 +29,12 @@ class GroupSocketManager extends SocketManager {
       if (authStore.getCurrentUser.id != userId) {
         groupStore.removeUserFromGroup(userId, groupName);
       } else {
-        (async () => {
-          await groupStore.unsubscribeFromGroupSocket(groupName);
-        })();
+        groupStore.unsubscribeFromGroupSocket(groupName);
       }
     });
 
     this.socket.on('groupTerminated', () => {
-      (async () => {
-        await groupStore.unsubscribeFromGroupSocket(groupName);
-      })();
+      groupStore.unsubscribeFromGroupSocket(groupName);
     });
 
     this.socket.on(
@@ -50,6 +46,10 @@ class GroupSocketManager extends SocketManager {
 
     this.socket.on('stoppedTyping', (userName: string) => {
       groupStore.stoppedTyping(groupName, userName);
+    });
+
+    this.socket.on('changedStatus', (userName: string, status: string) => {
+      groupStore.changedStatus(groupName, userName, status);
     });
   }
 
@@ -82,6 +82,13 @@ class GroupSocketManager extends SocketManager {
 
   public async userStoppedTyping(userName: string): Promise<void> {
     this.emitAsync<void>('userStoppedTyping', userName);
+  }
+
+  public async userChangedStatus(
+    userName: string,
+    status: string
+  ): Promise<void> {
+    this.emitAsync<void>('userChangedStatus', userName, status);
   }
 }
 

@@ -6,7 +6,7 @@
     <q-drawer
       v-else
       side="right"
-      v-model="store.usersDrawer"
+      v-model="appStore.usersDrawer"
       overlay
       class="bkg-secondary"
     >
@@ -20,8 +20,11 @@ import { useApplicationStore } from '../stores/applicationStore';
 import GroupsList from '../components/groups/GroupsList.vue';
 import UsersList from '../components/users/UsersList.vue';
 import GroupChat from '../components/messages/GroupChat.vue';
+import { onMounted } from 'vue';
 
-const store = useApplicationStore();
+const appStore = useApplicationStore();
+
+onMounted(() => (appStore.chosenAppPage = ''));
 </script>
 
 <style scoped lang="scss">

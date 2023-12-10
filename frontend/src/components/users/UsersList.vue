@@ -12,7 +12,6 @@
         <user-entry
           :member="item"
           :group-owner="groupStore.getActiveGroup.ownerId"
-          :status="statusStore.states.offline"
         />
       </q-virtual-scroll>
     </div>
@@ -21,11 +20,9 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
-import { useStatusStore } from 'src/stores/statusStore';
 import { useGroupStore } from 'src/stores/groupStore';
 import UserEntry from './UserEntry.vue';
 
-const statusStore = useStatusStore();
 const groupStore = useGroupStore();
 
 let target = ref(null);

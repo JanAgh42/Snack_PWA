@@ -59,7 +59,7 @@
           label="Undo changes"
           color="indigo-7"
           class="text-capitalize q-mr-md rounded-borders"
-          @click="loadUserData()"
+          @click="loadUserData"
           push
         />
         <q-btn
@@ -68,6 +68,7 @@
           color="indigo-7"
           class="text-capitalize q-mr-md rounded-borders"
           :disable="!isEditing"
+          :loading="isLoading"
           @click="saveUserData"
           push
         />
@@ -87,6 +88,7 @@
 <script setup lang="ts">
 import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useApplicationStore } from 'src/stores/applicationStore';
+import authService from 'src/api/services/authService';
 import { ref, onMounted, computed } from 'vue';
 
 const authStore = useAuthenticationStore();
@@ -94,24 +96,38 @@ const appStore = useApplicationStore();
 
 let name = ref('');
 let isEditing = ref(null);
+let isLoading = ref(false);
 
 const currentUser = computed(() => authStore.getCurrentUser);
 
-function loadUserData() {
+function loadUserData(): void {
   isEditing.value = false;
   name.value = currentUser.value.name;
 }
 
-function saveUserData() {
+async function saveUserData(): Promise<void> {
   isEditing.value = false;
+  isLoading.value = true;
+
+  const result = await authService.editUserData(name.value);
+  isLoading.value = false;
+
+  if (!result) {
+    loadUserData();
+    return;
+  }
+
   authStore.getCurrentUser.name = name.value;
 }
 
-async function logoutUser(): Promise<void> {
+function logoutUser(): void {
   appStore.toggleLogoutModal();
 }
 
-onMounted(() => loadUserData());
+onMounted(() => {
+  appStore.chosenAppPage = '/profile';
+  loadUserData();
+});
 </script>
 
 <style scoped lang="scss">

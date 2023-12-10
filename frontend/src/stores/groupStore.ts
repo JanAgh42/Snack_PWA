@@ -12,6 +12,8 @@ import { Message } from 'src/models/users/message';
 import Group from 'src/models/users/group';
 import { GroupUser } from 'src/models/users/user';
 
+import { statusKeys } from 'src/enums/statuses';
+
 export const useGroupStore = defineStore('groups', () => {
   const state: GroupState = reactive({
     isLoading: false,
@@ -104,10 +106,18 @@ export const useGroupStore = defineStore('groups', () => {
   }
 
   function removeUserFromGroup(userId: number, groupName: string): void {
-    state.groupUsers[groupName].splice(
+    const deletedMember = state.groupUsers[groupName].splice(
       state.groupUsers[groupName].findIndex((user) => user.id === userId),
       1
     );
+
+    const typedIndex = state.typedMessages[groupName].findIndex(
+      (typed) => typed.nickname === deletedMember[0].nickname
+    );
+
+    if (typedIndex <= -1) return;
+
+    state.typedMessages[groupName].splice(typedIndex, 1);
   }
 
   function startedTyping(
@@ -144,6 +154,22 @@ export const useGroupStore = defineStore('groups', () => {
     );
   }
 
+  function changedStatus(groupName: string, userName: string, status: string) {
+    if (statusKeys.indexOf(status) <= -1) return;
+
+    const groupUsersExist = groupName in state.groupUsers;
+    const userExists = groupUsersExist
+      ? state.groupUsers[groupName].some((typed) => typed.nickname === userName)
+      : false;
+
+    if (!groupUsersExist) state.groupUsers[groupName] = [];
+    if (!userExists) return;
+
+    state.groupUsers[groupName].find(
+      (user) => user.nickname === userName
+    ).status = status;
+  }
+
   function checkIfUserAlreadyTyped(
     groupName: string,
     userName: string
@@ -160,6 +186,22 @@ export const useGroupStore = defineStore('groups', () => {
     return userTypingExists;
   }
 
+  async function userChangedStatus(
+    userName: string,
+    status: string
+  ): Promise<void> {
+    try {
+      for (const groupName of getJoinedGroups.value) {
+        const socket = groupService.getGroupSocketByName(groupName);
+
+        await socket.userChangedStatus(userName, status);
+      }
+    } catch (error: any) {
+      markLoadingError(error as Error);
+      throw error;
+    }
+  }
+
   async function inviteUserToGroup(
     nickname: string,
     authId: number
@@ -170,6 +212,7 @@ export const useGroupStore = defineStore('groups', () => {
       const ownerId = state.activeGroup.ownerId;
 
       if (isPrivate && ownerId !== authId) return;
+      if (getUserNamesFromActiveGroup.value.includes(nickname)) return;
 
       await commonService
         .getCommonSocket()
@@ -187,7 +230,6 @@ export const useGroupStore = defineStore('groups', () => {
     try {
       markLoadingStart();
       const isPrivate = await groupService.checkIfGroupIsPrivate(groupName);
-      console.log(isPrivate);
 
       if (isPrivate) return;
 
@@ -231,7 +273,9 @@ export const useGroupStore = defineStore('groups', () => {
 
       const userId = state.groupUsers[groupName].find(
         (user) => user.nickname === userName
-      ).id;
+      )?.id;
+
+      if (!userId || (!isPrivate && userId === ownerId)) return;
 
       await groupService
         .getGroupSocketByName(groupName)
@@ -253,7 +297,7 @@ export const useGroupStore = defineStore('groups', () => {
         .getGroupSocketByName(groupName)
         ?.removeUserFromGroup(userId);
 
-      await unsubscribeFromGroupSocket(groupName);
+      unsubscribeFromGroupSocket(groupName);
 
       markLoadingEnd();
     } catch (error: any) {
@@ -320,7 +364,7 @@ export const useGroupStore = defineStore('groups', () => {
     insertNewMessage(groupName, savedMessage);
   }
 
-  async function loadAnotherGroupOfMessages(): Promise<void> {
+  async function loadAnotherGroupOfMessages(): Promise<number> {
     if (!state.activeGroup) return;
 
     const groupName = state.activeGroup.name;
@@ -336,6 +380,7 @@ export const useGroupStore = defineStore('groups', () => {
     const newMessages = await groupSocket.loadGroupMessages(currentDate);
 
     insertLoadedMessages(groupName, newMessages);
+    return newMessages ? newMessages.length : 0;
   }
 
   async function userStartedTyping(
@@ -358,8 +403,6 @@ export const useGroupStore = defineStore('groups', () => {
     const groupName = state.activeGroup.name;
     const groupSocket = groupService.getGroupSocketByName(groupName);
 
-    console.log(groupName);
-
     if (!groupSocket) return;
 
     await groupSocket.userStoppedTyping(userName);
@@ -375,10 +418,12 @@ export const useGroupStore = defineStore('groups', () => {
     getTypedOfActiveGroup,
     startedTyping,
     stoppedTyping,
+    changedStatus,
     changeActiveGroup,
     insertNewMessage,
     insertNewGroup,
     insertNewUser,
+    userChangedStatus,
     removeUserFromGroup,
     inviteUserToGroup,
     invitedToJoinGroup,

@@ -1,9 +1,10 @@
 <template>
-  <q-item
-    class="q-py-xs"
-    :class="myReference ? 'bright-background' : ''"
-    :clickable="isTyping"
-    :dense="isTyping"
+  <article
+    class="q-py-sm row message"
+    :class="[
+      myReference || isTyping ? 'bright-background' : '',
+      isTyping ? 'cursor-pointer' : '',
+    ]"
     @click="toggleShowTypings"
   >
     <q-item-section class="time-width" top>
@@ -21,35 +22,33 @@
     </q-item-section>
     <q-item-section top>
       <q-item-label>
-        <div class="">
-          <span
-            class="text-weight-bold q-mr-sm"
-            :class="
-              isOwner
-                ? 'owner-color'
-                : isPastUser
-                ? 'past-name-color'
-                : 'name-color'
-            "
-            >{{
-              'groupId' in props.message
-                ? props.message.author.nickname
-                : props.message.nickname
-            }}</span
-          >
-          <span class="line-height" v-if="showTypings">{{
-            props.message.content
-          }}</span>
-          <span class="dots-anim" v-else-if="isTyping">is typing</span>
-          <span
-            class="line-height word-wrap message-content"
-            v-html="messageContent"
-            v-else
-          ></span>
-        </div>
+        <span
+          class="text-weight-bold q-mr-sm"
+          :class="
+            isOwner
+              ? 'owner-color'
+              : isPastUser
+              ? 'past-name-color'
+              : 'name-color'
+          "
+          >{{
+            'groupId' in props.message
+              ? props.message.author.nickname
+              : props.message.nickname
+          }}</span
+        >
+        <span class="line-height word-wrap" v-if="showTypings">{{
+          props.message.content
+        }}</span>
+        <span class="dots-anim" v-else-if="isTyping">is typing</span>
+        <span
+          class="line-height word-wrap message-content"
+          v-html="messageContent"
+          v-else
+        ></span>
       </q-item-label>
     </q-item-section>
-  </q-item>
+  </article>
 </template>
 
 <script setup lang="ts">
@@ -168,6 +167,10 @@ onMounted(() => {
   color: $grey-7;
 }
 
+.height-auto {
+  display: flex;
+}
+
 .bright-background {
   background-color: $ownmessage;
 }
@@ -176,12 +179,23 @@ onMounted(() => {
   line-height: 1.5;
 }
 
+.message {
+  transition: height 0.3s;
+}
+
 .time-width {
   max-width: 60px;
 }
 
 .word-wrap {
+  overflow-wrap: break-word;
   word-wrap: break-word;
+  -ms-word-break: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .dots-anim::after {

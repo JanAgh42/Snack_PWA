@@ -12,11 +12,7 @@
           v-slot="{ item }"
           class="q-mt-sm"
         >
-          <user-entry
-            :member="item"
-            :group-owner="0"
-            :status="statusStore.states.offline"
-          />
+          <user-entry :member="item" :group-owner="0" />
         </q-virtual-scroll>
       </q-card-section>
 
@@ -36,12 +32,10 @@
 import { computed } from 'vue';
 import { useApplicationStore } from '../../stores/applicationStore';
 import { useGroupStore } from '../../stores/groupStore';
-import { useStatusStore } from 'src/stores/statusStore';
 import UserEntry from 'src/components/users/UserEntry.vue';
 
 const appStore = useApplicationStore();
 const groupStore = useGroupStore();
-const statusStore = useStatusStore();
 
 const groupUsers = computed(
   () => groupStore.state.groupUsers[appStore.getGroupNameForModal]

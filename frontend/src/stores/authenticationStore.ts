@@ -44,11 +44,17 @@ export const useAuthenticationStore = defineStore('auth', () => {
   function markAuthSuccess(currentUser: User | null): void {
     state.status = 'success';
     state.currentUser = currentUser;
+
+    if (state.currentUser) state.currentUser.status = 'ONLINE';
   }
 
   function markAuthFailure(errors: []): void {
     state.status = 'error';
     state.errors = errors;
+  }
+
+  function setStatusOfUser(status: string): void {
+    state.currentUser.status = status;
   }
 
   async function verifyAndGetCurrentUser(): Promise<boolean> {
@@ -57,11 +63,12 @@ export const useAuthenticationStore = defineStore('auth', () => {
       const currentUser = await authService.getCurrentUser();
 
       if (currentUser?.id !== state.currentUser?.id) {
+        commonService.subscribeToCommonSocket();
+
         for (const group of currentUser.groups) {
           await groupStore.subscribeToGroupSocket(group.name);
           groupStore.insertNewGroup({ ...group });
         }
-        commonService.subscribeToCommonSocket();
       }
 
       markAuthSuccess(currentUser);
@@ -69,7 +76,6 @@ export const useAuthenticationStore = defineStore('auth', () => {
       return state.currentUser !== null;
     } catch (errors: any) {
       markAuthFailure(errors as []);
-      throw errors;
     }
   }
 
@@ -124,8 +130,8 @@ export const useAuthenticationStore = defineStore('auth', () => {
 
       await authService.logoutUser();
 
-      groupStore.unsubscribeFromAllGroupSockets();
       commonService.unsubscribeFromCommonSocket();
+      groupStore.unsubscribeFromAllGroupSockets();
       markInit();
 
       authManager.removeToken();
@@ -137,6 +143,7 @@ export const useAuthenticationStore = defineStore('auth', () => {
 
   return {
     state,
+    setStatusOfUser,
     getCurrentUser,
     isUserAuthenticated,
     isLoading,

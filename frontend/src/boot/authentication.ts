@@ -29,13 +29,9 @@ export default boot(({ router, store }) => {
   router.beforeEach(async (route) => {
     const authStore = useAuthenticationStore(store);
 
-    let isAuthenticated = authStore.isUserAuthenticated;
-
-    if (!isAuthenticated) {
-      if (route.meta.guestOnly) return;
-
-      isAuthenticated = await authStore.verifyAndGetCurrentUser();
-    }
+    const isAuthenticated = authStore.isUserAuthenticated
+      ? true
+      : await authStore.verifyAndGetCurrentUser();
 
     if (route.meta.requiresAuth && !isAuthenticated) return loginRoute(route);
 

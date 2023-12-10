@@ -3,6 +3,8 @@ import { BootParams, SocketManager } from '../socketManager';
 import Group from 'src/models/users/group';
 import { GroupUser } from 'src/models/users/user';
 
+import authManager from '../authManager';
+
 import { useGroupStore } from 'src/stores/groupStore';
 
 // creating instance of this class automatically connects to given socket.io namespace

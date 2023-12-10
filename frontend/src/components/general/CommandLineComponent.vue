@@ -55,6 +55,12 @@ async function executeCommand() {
         const exists = await groupService.checkIfGroupExists(processedInput[1]);
 
         if (exists) {
+          const isPrivate = await groupService.checkIfGroupIsPrivate(
+            processedInput[1]
+          );
+
+          if (isPrivate) break;
+
           await groupStore.joinMyselfToGroup(
             processedInput[1],
             authStore.getCurrentUser.nickname
@@ -105,6 +111,7 @@ async function executeCommand() {
         break;
       case Commands.REVOKE:
         if (!groupStore.getActiveGroup?.isPrivate) break;
+        if (processedInput[1] === authStore.getCurrentUser.nickname) break;
 
         await groupStore.removeOtherUserFromGroup(
           processedInput[1],

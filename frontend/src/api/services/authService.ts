@@ -10,7 +10,7 @@ class AuthService {
   public async getCurrentUser(dontTriggerLogout = false): Promise<User | null> {
     try {
       return (
-        await api.get('auth/get-current-user', {
+        await api.get('users/get-current-user', {
           dontTriggerLogout,
         } as AxiosRequestConfig)
       ).data;
@@ -30,7 +30,12 @@ class AuthService {
   }
 
   public async logoutUser(): Promise<void> {
-    await api.post('auth/logout-user');
+    await api.post<void>('auth/logout-user');
+  }
+
+  public async editUserData(name: string): Promise<boolean> {
+    return (await api.patch<boolean>('users/edit-user', { userName: name }))
+      .data;
   }
 }
 

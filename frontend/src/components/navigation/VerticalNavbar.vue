@@ -4,7 +4,7 @@
       <q-item
         clickable
         @click="switchPage('')"
-        :active="store.getChosenAppPage == ''"
+        :active="store.chosenAppPage == ''"
         active-class="active-color"
         class="q-px-md flex justify-center items-center"
       >
@@ -13,7 +13,7 @@
       <q-item
         clickable
         @click="switchPage('/profile')"
-        :active="store.getChosenAppPage == '/profile'"
+        :active="store.chosenAppPage == '/profile'"
         active-class="active-color"
         class="q-px-md flex justify-center items-center"
       >
@@ -23,7 +23,7 @@
     <q-item
       clickable
       @click="switchPage('/settings')"
-      :active="store.getChosenAppPage == '/settings'"
+      :active="store.chosenAppPage == '/settings'"
       active-class="active-color"
       class="q-px-md flex justify-center items-center"
     >

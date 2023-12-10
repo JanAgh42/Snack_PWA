@@ -82,6 +82,7 @@
 import { useAuthenticationStore } from 'src/stores/authenticationStore';
 import { useApplicationStore } from 'src/stores/applicationStore';
 import { colorValues } from 'src/enums/colors';
+import { statusKeys } from 'src/enums/statuses';
 import { useRouter } from 'vue-router';
 import { ref, reactive } from 'vue';
 
@@ -97,6 +98,7 @@ const register: Register = reactive({
   email: '',
   password: '',
   color: '',
+  status: statusKeys[0],
 });
 
 let confirmPassword = ref('');

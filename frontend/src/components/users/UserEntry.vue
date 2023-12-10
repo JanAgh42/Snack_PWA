@@ -16,8 +16,8 @@
       </q-item-label>
     </q-item-section>
     <q-item-section side top>
-      <q-item-label :style="{ color: props.status.color }" caption>{{
-        props.status.name
+      <q-item-label :style="{ color: statusColor }" caption>{{
+        statusValue
       }}</q-item-label>
     </q-item-section>
   </q-item>
@@ -27,17 +27,28 @@
 import { computed } from 'vue';
 import { useCommandLineStore } from 'src/stores/cmdStore';
 import { GroupUser } from 'src/models/users/user';
+import { statusValues, statusKeys } from 'src/enums/statuses';
 
 const props = defineProps<{
   member: GroupUser;
   groupOwner: number;
-  status: {
-    name: string;
-    color: string;
-  };
 }>();
 
 const cmdStore = useCommandLineStore();
+
+const statusValue = computed(() => {
+  const valueIndex = statusKeys.indexOf(props.member.status);
+
+  return valueIndex > -1 ? props.member.status : statusKeys[0];
+});
+
+const statusColor = computed(() => {
+  const valueIndex = statusKeys.indexOf(props.member.status);
+
+  return valueIndex > -1
+    ? statusValues[valueIndex].toString()
+    : statusValues[0].toString();
+});
 
 const getNicknameColor = computed(() =>
   props.member.id === props.groupOwner

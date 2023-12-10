@@ -17,22 +17,23 @@
         >Leave</q-btn
       >
     </section>
-    <q-infinite-scroll
-      @load="triggerLoad"
-      :offset="300"
-      class="scroll-size overflow-auto q-mx-lg track"
-      reverse
-    >
-      <template #loading>
-        <div class="row justify-center q-my-md">
-          <q-spinner-hourglass color="primary" name="dots" size="50px" />
-        </div>
-      </template>
-
+    <div class="scroll-size overflow-auto q-mx-lg track" ref="infiniteScroll">
       <template v-for="message in messageList" :key="message.id.toString()">
         <group-message :message="message" />
       </template>
-    </q-infinite-scroll>
+      <div class="row justify-center q-my-md">
+        <q-spinner-hourglass
+          color="primary"
+          name="dots"
+          size="50px"
+          v-if="
+            lastAmountOfMessages > 0 &&
+            groupStore.getMessagesOfActiveGroup.length >= 20
+          "
+        />
+        <h6 v-else>Beginning of conversation</h6>
+      </div>
+    </div>
   </article>
   <article
     v-else
@@ -43,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, onUpdated } from 'vue';
 import { useGroupStore } from '../../stores/groupStore';
 import { useApplicationStore } from 'src/stores/applicationStore';
 import GroupMessage from './GroupMessage.vue';
@@ -52,21 +53,66 @@ import { Message, TypedMessage } from 'src/models/users/message';
 const appStore = useApplicationStore();
 const groupStore = useGroupStore();
 
+const infiniteScroll = ref(null);
+
+let previousGroupName = ref('');
+let lastAmountOfMessages = ref(20);
+let isLoading = ref(false);
+
 const messageList = computed(() =>
   groupStore.getTypedOfActiveGroup
-    ? ([].concat(
-        groupStore.getMessagesOfActiveGroup,
-        groupStore.getTypedOfActiveGroup
-      ) as (Message | TypedMessage)[])
-    : groupStore.getMessagesOfActiveGroup
+    ? ([]
+        .concat(
+          groupStore.getMessagesOfActiveGroup,
+          groupStore.getTypedOfActiveGroup
+        )
+        .toReversed() as (Message | TypedMessage)[])
+    : groupStore.getMessagesOfActiveGroup.toReversed()
 );
 
-function triggerLoad(index: any, done: any) {
+function triggerLoad() {
   setTimeout(() => {
-    (async () => await groupStore.loadAnotherGroupOfMessages())();
-    done();
-  }, 2000);
+    (async () => {
+      lastAmountOfMessages.value =
+        await groupStore.loadAnotherGroupOfMessages();
+      isLoading.value = false;
+    })();
+  }, 300);
 }
+
+function handleInfiniteScroll(): void {
+  if (
+    lastAmountOfMessages.value > 0 &&
+    !isLoading.value &&
+    infiniteScroll.value &&
+    infiniteScroll.value.scrollTop - 300 <
+      infiniteScroll.value.clientHeight - infiniteScroll.value.scrollHeight
+  ) {
+    isLoading.value = true;
+    triggerLoad();
+  }
+}
+
+onUpdated(() => {
+  if (previousGroupName.value === groupStore.getActiveGroup?.name) return;
+
+  lastAmountOfMessages.value = 20;
+  previousGroupName.value = groupStore.getActiveGroup?.name;
+});
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    if (infiniteScroll.value) {
+      infiniteScroll.value.addEventListener('scroll', handleInfiniteScroll);
+      infiniteScroll.value.scrollTop = 0;
+      clearInterval(interval);
+    }
+  }, 50);
+});
+
+onBeforeUnmount(() => {
+  infiniteScroll.value.removeEventListener('scroll', handleInfiniteScroll);
+});
 </script>
 
 <style scoped lang="scss">
@@ -77,6 +123,8 @@ function triggerLoad(index: any, done: any) {
 .scroll-size {
   max-height: calc(100vh - 180px);
   min-height: calc(100vh - 180px);
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .group-name-border {

@@ -38,11 +38,11 @@ class GroupService {
   }
 
   public async checkIfGroupExists(groupName: string) {
-    return (await api.get<Group>(`groupshttp/${groupName}/exists`)).data;
+    return (await api.get<boolean>(`groupshttp/${groupName}/exists`)).data;
   }
 
   public async checkIfGroupIsPrivate(groupName: string) {
-    return (await api.get<Group>(`groupshttp/${groupName}/type`)).data;
+    return (await api.get<boolean>(`groupshttp/${groupName}/type`)).data;
   }
 }
 
