@@ -43,6 +43,7 @@
         <span class="dots-anim" v-else-if="isTyping">is typing</span>
         <span
           class="line-height word-wrap message-content"
+          :class="isPastUser ? 'past-name-color' : ''"
           v-html="messageContent"
           v-else
         ></span>

@@ -111,9 +111,12 @@ export const useGroupStore = defineStore('groups', () => {
       1
     );
 
-    const typedIndex = state.typedMessages[groupName].findIndex(
-      (typed) => typed.nickname === deletedMember[0].nickname
-    );
+    const groupTypingsExist = groupName in state.typedMessages;
+    const typedIndex = groupTypingsExist
+      ? state.typedMessages[groupName].findIndex(
+          (typed) => typed.nickname === deletedMember[0].nickname
+        )
+      : -1;
 
     if (typedIndex <= -1) return;
 

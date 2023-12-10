@@ -17,7 +17,10 @@
         >Leave</q-btn
       >
     </section>
-    <div class="scroll-size overflow-auto q-mx-lg track" ref="infiniteScroll">
+    <div
+      class="scroll-size overflow-auto q-mx-lg q-px-sm track"
+      ref="infiniteScroll"
+    >
       <template v-for="message in messageList" :key="message.id.toString()">
         <group-message :message="message" />
       </template>
@@ -111,7 +114,9 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  infiniteScroll.value.removeEventListener('scroll', handleInfiniteScroll);
+  if (infiniteScroll.value) {
+    infiniteScroll.value.removeEventListener('scroll', handleInfiniteScroll);
+  }
 });
 </script>
 

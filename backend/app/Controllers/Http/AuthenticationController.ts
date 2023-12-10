@@ -24,9 +24,4 @@ export default class AuthenticationController {
   public async logoutUser({ auth }: HttpContextContract): Promise<void> {
     return auth.use('api').logout();
   }
-
-  public async getCurrentUser({ auth }: HttpContextContract): Promise<User | undefined> {
-    await auth.user!.load('groups');
-    return auth.user;
-  }
 }

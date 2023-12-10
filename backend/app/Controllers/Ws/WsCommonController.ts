@@ -25,6 +25,6 @@ export default class WsCommonController {
     const JSONs = await this.wsGroupRepository.joinUserToGroup(groupName, userName);
 
     socket.nsp.except(`user:${JSONs.userJSON.id}`).emit('newGroupUser', groupName, JSONs.userJSON);
-    socket.to(`user:${JSONs.userJSON.id}`).emit('invitedToJoinGroup', JSONs.groupJSON, auth.user!.id === JSONs.groupJSON.ownerId ? true : false);
+    socket.to(`user:${JSONs.userJSON.id}`).emit('invitedToJoinGroup', JSONs.groupJSON, auth.user!.id === JSONs.groupJSON.ownerId);
   }
 }
