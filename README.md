@@ -32,25 +32,34 @@ A social network PWA inspired by Slack, a cloud-based freemium cross-platform in
 
 #### The built-in CLI is able to perform the following actions (besides messaging):
 
-- `/` - indicates the beginning of an operation query inside the CLI. Hint: a valid command's color will turn green.<br><br>
-- `/join 'groupname'` - join an existing group. If a group does not exist, it will be created. Hint: a user can only join a public group; in order to become a member of a private one, you have to be invited by its owner.<br><br>
-- `/join 'groupname' [visibility]` - create a new group. Inside the square brackets replace 'visibility' with either 'public' to create a group open to all users, or 'private' to create a hidden group. Hint: your group's name has to be unique.<br><br>
-- `/invite 'username'` - add another user to the currently selected group. Hint: you can add any user to a public group, but in a private group only the owner can add users.<br><br>
-- `/revoke 'username'` - remove a user from the currently selected group. Available in private groups only. Hint: only the owner can use this command.<br><br>
-- `/quit` - delete the currently selected group. Available in both private and public groups. Hint: only the owner can use this command.<br><br>
-- `/cancel` - leave the currently selected group. Available in both private and public groups. Hint: when the owner leaves his group, it is automatically deleted.<br><br>
-- `/kick 'username'` - remove a user from the currently selected group. Available in public groups only. Hint: a regular user cannot remove the owner.<br><br>
+- `/` - indicates the beginning of an operation query inside the CLI.
+  - Hint: a valid command's color will turn green.<br><br>
+- `/join 'groupname'` - join an existing group. If a group does not exist, it will be created.
+  - Hint: a user can only join a public group; in order to become a member of a private one, you have to be invited by its owner.<br><br>
+- `/join 'groupname' [visibility]` - create a new group. Inside the square brackets replace 'visibility' with either 'public' to create a group open to all users, or 'private' to create a hidden group.
+  - Hint: your group's name has to be unique.<br><br>
+- `/invite 'username'` - add another user to the currently selected group.
+  - Hint: you can add any user to a public group, but in a private group only the owner can add users.<br><br>
+- `/revoke 'username'` - remove a user from the currently selected group. Available in private groups only.
+  - Hint: only the owner can use this command.<br><br>
+- `/quit` - delete the currently selected group. Available in both private and public groups.
+  - Hint: only the owner can use this command.<br><br>
+- `/cancel` - leave the currently selected group. Available in both private and public groups.
+  - Hint: when the owner leaves his group, it is automatically deleted.<br><br>
+- `/kick 'username'` - remove a user from the currently selected group. Available in public groups only.
+  - Hint: a regular user cannot remove the owner.<br><br>
 - `/list` - show the list of members of the currently active group together with their activity status in a separate modal.<br><br>
 - `/list 'groupname'` - show the list of members of any selected group the user is a member of, together with their activity status in a separate modal.<br><br>
-- `@username` - address your message to certain users. All group members will see the user's highlighted name in the message, but the mentioned user will aditionally have the background of the given message highlighted as well. Hint: you can automatically insert @username by clicking on the user nickname in the group member's list.
+- `@username` - address your message to certain users. All group members will see the user's highlighted name in the message, but the mentioned user will aditionally have the background of the given message highlighted as well.
+  - Hint: you can automatically insert @username by clicking on the user nickname in the group member's list.
 
 ### Frontend overview:
 
-- Located inside the readme of the frontend/ folder
+- Located inside the [readme of the frontend/ folder](frontend)
 
 ### Backend overview:
 
-- Located inside the readme of the backend/ folder
+- Located inside the [readme of the backend/ folder](backend)
 
 ### Team members:
 
